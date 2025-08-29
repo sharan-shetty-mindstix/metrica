@@ -51,7 +51,7 @@ module "resource_group" {
 module "adls" {
   source = "./modules/adls"
   
-  name                = "${local.naming_convention.prefix}adls"
+  name                = "${var.project_name}${var.environment}adls"
   resource_group_name = module.resource_group.name
   location           = var.azure_location
   account_tier       = "Standard"
@@ -145,8 +145,6 @@ module "key_vault" {
   location           = var.azure_location
   tags               = local.common_tags
   
-  # Store GCP service account key
-  secrets = {
-    gcp-service-account-key = module.gcp_service_account.private_key
-  }
+  # Store GCP service account key separately
+  gcp_service_account_key = module.gcp_service_account.private_key
 }

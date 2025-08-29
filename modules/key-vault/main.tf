@@ -30,12 +30,23 @@ resource "azurerm_role_assignment" "key_vault_admin" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
-# Store secrets
+# Store secrets (non-sensitive)
 resource "azurerm_key_vault_secret" "secrets" {
   for_each = var.secrets
   
   name         = each.key
   value        = each.value
+  key_vault_id = azurerm_key_vault.key_vault.id
+  
+  depends_on = [azurerm_role_assignment.key_vault_admin]
+}
+
+# Store GCP service account key separately to avoid sensitive value in for_each
+resource "azurerm_key_vault_secret" "gcp_service_account_key" {
+  count = var.gcp_service_account_key != null ? 1 : 0
+  
+  name         = "gcp-service-account-key"
+  value        = var.gcp_service_account_key
   key_vault_id = azurerm_key_vault.key_vault.id
   
   depends_on = [azurerm_role_assignment.key_vault_admin]

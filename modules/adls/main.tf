@@ -28,6 +28,6 @@ resource "azurerm_storage_container" "containers" {
   for_each = var.containers
   
   name                  = each.value.name
-  storage_account_id    = azurerm_storage_account.adls.id
+  storage_account_name  = azurerm_storage_account.adls.name
   container_access_type = each.value.access_type
 }

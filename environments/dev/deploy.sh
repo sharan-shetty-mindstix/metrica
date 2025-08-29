@@ -18,11 +18,12 @@ gcloud auth list --filter=status:ACTIVE --format="value(account)" | head -1 >/de
 
 # Initialize Terraform
 echo "🔧 Initializing Terraform..."
+cd stack
 terraform init
 
 # Plan deployment
 echo "📋 Planning deployment..."
-terraform plan -var-file="main.tfvars" -out="dev.tfplan"
+terraform plan -var-file="../variables/main.tfvars" -out="dev.tfplan"
 
 # Confirm deployment
 read -p "🤔 Do you want to apply this plan? (y/N): " -n 1 -r
@@ -31,7 +32,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "🚀 Applying Terraform configuration..."
     terraform apply "dev.tfplan"
     echo "✅ Development deployment completed successfully!"
+    cd ..
 else
     echo "❌ Deployment cancelled."
+    cd ..
     exit 0
 fi

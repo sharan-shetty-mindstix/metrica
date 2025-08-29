@@ -39,18 +39,22 @@ This project follows HashiCorp best practices for environment management:
 │   └── key-vault/
 ├── environments/              # Environment-specific configurations
 │   ├── dev/                  # Development environment
-│   │   ├── main.tf          # Dev-specific configuration
-│   │   ├── variables.tf     # Dev variables
-│   │   ├── outputs.tf       # Dev outputs
-│   │   ├── backend.tf       # Dev state backend
-│   │   ├── main.tfvars      # Dev variable values
+│   │   ├── stack/           # Terraform configuration files
+│   │   │   ├── main.tf      # Dev-specific configuration
+│   │   │   ├── variables.tf # Dev variables
+│   │   │   ├── outputs.tf   # Dev outputs
+│   │   │   └── backend.tf   # Dev state backend
+│   │   ├── variables/       # Environment-specific variable values
+│   │   │   └── main.tfvars  # Dev variable values
 │   │   └── deploy.sh        # Dev deployment script
 │   └── prod/                # Production environment
-│       ├── main.tf          # Prod-specific configuration
-│       ├── variables.tf     # Prod variables
-│       ├── outputs.tf       # Prod outputs
-│       ├── backend.tf       # Prod state backend
-│       ├── main.tfvars      # Prod variable values
+│       ├── stack/           # Terraform configuration files
+│       │   ├── main.tf      # Prod-specific configuration
+│       │   ├── variables.tf # Prod variables
+│       │   ├── outputs.tf   # Prod outputs
+│       │   └── backend.tf   # Prod state backend
+│       ├── variables/       # Environment-specific variable values
+│       │   └── main.tfvars  # Prod variable values
 │       └── deploy.sh        # Prod deployment script
 ├── deploy.sh                # Root deployment script
 └── README.md               # This file
@@ -64,10 +68,10 @@ Update the environment-specific `.tfvars` files:
 
 ```bash
 # For development
-vim environments/dev/main.tfvars
+vim environments/dev/variables/main.tfvars
 
 # For production
-vim environments/prod/main.tfvars
+vim environments/prod/variables/main.tfvars
 ```
 
 Required configuration:

@@ -40,7 +40,7 @@ locals {
 
 # Resource Group
 module "resource_group" {
-  source = "../../modules/resource-group"
+  source = "../../../modules/resource-group"
   
   name     = "${local.naming_convention.prefix}-rg"
   location = var.azure_location
@@ -49,13 +49,13 @@ module "resource_group" {
 
 # Azure Data Lake Storage Gen2
 module "adls" {
-  source = "../../modules/adls"
+  source = "../../../modules/adls"
   
-  name                = "${local.naming_convention.prefix}adls"
+  name                = "${var.project_name}${var.environment}adls"
   resource_group_name = module.resource_group.name
   location           = var.azure_location
   account_tier       = "Standard"
-  account_replication_type = "GRS"  # Higher availability for prod
+  account_replication_type = "LRS"
   is_hns_enabled     = true
   tags               = local.common_tags
   
@@ -77,7 +77,7 @@ module "adls" {
 
 # Azure Data Factory
 module "adf" {
-  source = "../../modules/adf"
+  source = "../../../modules/adf"
   
   name                = "${local.naming_convention.prefix}-adf"
   resource_group_name = module.resource_group.name
@@ -95,7 +95,7 @@ module "adf" {
 
 # Google Cloud Storage for intermediate data
 module "gcs" {
-  source = "../../modules/gcs"
+  source = "../../../modules/gcs"
   
   project_id = var.gcp_project_id
   location   = var.gcp_region
@@ -104,31 +104,19 @@ module "gcs" {
     ga-raw-data = {
       name          = "${var.project_name}-${var.environment}-ga-raw-data"
       location      = var.gcp_region
-      force_destroy = false  # Protect production data
-      lifecycle_rules = [
-        {
-          age        = 365
-          action_type = "Delete"
-        }
-      ]
+      force_destroy = true
     }
     ga-processed-data = {
       name          = "${var.project_name}-${var.environment}-ga-processed-data"
       location      = var.gcp_region
-      force_destroy = false  # Protect production data
-      lifecycle_rules = [
-        {
-          age        = 365
-          action_type = "Delete"
-        }
-      ]
+      force_destroy = true
     }
   }
 }
 
 # Google Cloud Service Account for ADF integration
 module "gcp_service_account" {
-  source = "../../modules/gcp-service-account"
+  source = "../../../modules/gcp-service-account"
   
   project_id = var.gcp_project_id
   account_id = "${var.project_name}-${var.environment}-adf-sa"
@@ -150,15 +138,13 @@ module "gcp_service_account" {
 
 # Azure Key Vault for storing secrets
 module "key_vault" {
-  source = "../../modules/key-vault"
+  source = "../../../modules/key-vault"
   
   name                = "${local.naming_convention.prefix}-kv"
   resource_group_name = module.resource_group.name
   location           = var.azure_location
   tags               = local.common_tags
   
-  # Store GCP service account key
-  secrets = {
-    gcp-service-account-key = module.gcp_service_account.private_key
-  }
+  # Store GCP service account key separately
+  gcp_service_account_key = module.gcp_service_account.private_key
 }

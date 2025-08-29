@@ -18,11 +18,12 @@ gcloud auth list --filter=status:ACTIVE --format="value(account)" | head -1 >/de
 
 # Initialize Terraform
 echo "🔧 Initializing Terraform..."
+cd stack
 terraform init
 
 # Plan deployment
 echo "📋 Planning deployment..."
-terraform plan -var-file="main.tfvars" -out="prod.tfplan"
+terraform plan -var-file="../variables/main.tfvars" -out="prod.tfplan"
 
 # Confirm deployment with extra warning for production
 echo "⚠️  WARNING: You are about to deploy to PRODUCTION environment!"
@@ -33,7 +34,9 @@ if [[ $REPLY == "yes" ]]; then
     echo "🚀 Applying Terraform configuration to production..."
     terraform apply "prod.tfplan"
     echo "✅ Production deployment completed successfully!"
+    cd ..
 else
     echo "❌ Production deployment cancelled."
+    cd ..
     exit 0
 fi
