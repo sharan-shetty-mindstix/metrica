@@ -171,3 +171,21 @@ Since the stack files are now in a subdirectory, module paths have been updated 
 5. **Use workspaces** or separate state files for different environments
 6. **Rotate credentials regularly** - Update .env files with new values
 7. **Use different .env files** for different environments (dev, stage, prod)
+8. **Always clean up terraform init files** after testing - Never commit .terraform/, .terraform.lock.hcl, or terraform.tfstate files
+
+### 🧹 **Keeping Repository Clean**
+
+After testing Terraform configurations, always remove these files:
+```bash
+# Remove terraform init files
+rm -rf .terraform/ .terraform.lock.hcl terraform.tfstate*
+
+# Or use the cleanup script
+./cleanup.sh  # if you create one
+```
+
+**Why this matters:**
+- **Repository size** - Terraform files can be large
+- **Team collaboration** - Prevents conflicts between different environments
+- **Security** - State files may contain sensitive information
+- **Fresh deployments** - Ensures clean initialization each time

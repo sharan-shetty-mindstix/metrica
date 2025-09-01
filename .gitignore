@@ -1,6 +1,7 @@
 # =============================================================================
 # Terraform Files
 # =============================================================================
+# IMPORTANT: Always remove these files after testing to keep repository clean
 *.tfstate
 *.tfstate.*
 *.tfstate.backup
