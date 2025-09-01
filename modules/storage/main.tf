@@ -11,27 +11,16 @@ resource "azurerm_storage_account" "adls" {
   tags = var.tags
 }
 
-# Storage Containers (RAW, Bronze, Silver, Gold)
-resource "azurerm_storage_container" "raw" {
-  name                  = "raw"
-  storage_account_name  = azurerm_storage_account.adls.name
-  container_access_type = "private"
+# Storage Containers (configurable via list)
+variable "container_names" {
+  type        = list(string)
+  description = "List of ADLS container names to create."
+  default     = ["raw", "bronze", "silver", "gold"]
 }
 
-resource "azurerm_storage_container" "bronze" {
-  name                  = "bronze"
-  storage_account_name  = azurerm_storage_account.adls.name
-  container_access_type = "private"
-}
-
-resource "azurerm_storage_container" "silver" {
-  name                  = "silver"
-  storage_account_name  = azurerm_storage_account.adls.name
-  container_access_type = "private"
-}
-
-resource "azurerm_storage_container" "gold" {
-  name                  = "gold"
-  storage_account_name  = azurerm_storage_account.adls.name
+resource "azurerm_storage_container" "containers" {
+  for_each              = toset(var.container_names)
+  name                  = each.value
+  storage_account_id    = azurerm_storage_account.adls.id
   container_access_type = "private"
 }

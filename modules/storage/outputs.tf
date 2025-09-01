@@ -15,10 +15,5 @@ output "storage_account_primary_dfs_endpoint" {
 
 output "storage_containers" {
   description = "Names of all storage containers"
-  value = {
-    raw    = azurerm_storage_container.raw.name
-    bronze = azurerm_storage_container.bronze.name
-    silver = azurerm_storage_container.silver.name
-    gold   = azurerm_storage_container.gold.name
-  }
+  value       = [for c in azurerm_storage_container.containers : c.name]
 }
