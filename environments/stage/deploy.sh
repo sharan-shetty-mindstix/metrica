@@ -3,17 +3,20 @@
 echo "🚀 Deploying STAGE Environment..."
 echo "================================="
 
+# Change to stack directory
+cd stack
+
 # Initialize Terraform
 echo "🔧 Initializing Terraform..."
 terraform init
 
 # Plan deployment
 echo "📋 Planning deployment..."
-terraform plan
+terraform plan -var-file="../variables/terraform.tfvars"
 
 # Ask for confirmation
 echo ""
-read -p "Do you want to proceed with the deployment? (y/N): " -n 1 -r
+read -p "Do you want to proceed with the deployment? (y/N): " -n 0 -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "❌ Deployment cancelled."
@@ -22,7 +25,7 @@ fi
 
 # Apply deployment
 echo "🚀 Applying deployment..."
-terraform apply -auto-approve
+terraform apply -auto-approve -var-file="../variables/terraform.tfvars"
 
 echo ""
 echo "✅ STAGE Environment deployment completed!"

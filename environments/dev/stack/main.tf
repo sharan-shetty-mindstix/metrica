@@ -35,7 +35,7 @@ locals {
 
 # Resource Group
 module "resource_group" {
-  source = "../../modules/resource-group"
+  source = "../../../modules/resource-group"
   
   resource_group_name = var.resource_group_name
   location           = var.azure_location
@@ -44,7 +44,7 @@ module "resource_group" {
 
 # Azure Data Lake Storage Gen2
 module "storage" {
-  source = "../../modules/storage"
+  source = "../../../modules/storage"
   
   storage_account_name = var.storage_account_name
   resource_group_name  = module.resource_group.resource_group_name
@@ -56,7 +56,7 @@ module "storage" {
 
 # Azure Data Factory
 module "data_factory" {
-  source = "../../modules/data-factory"
+  source = "../../../modules/data-factory"
   
   data_factory_name   = var.data_factory_name
   resource_group_name = module.resource_group.resource_group_name
@@ -71,7 +71,7 @@ module "data_factory" {
 
 # Azure Key Vault for storing secrets
 module "key_vault" {
-  source = "../../modules/key-vault"
+  source = "../../../modules/key-vault"
   
   key_vault_name     = var.key_vault_name
   resource_group_name = module.resource_group.resource_group_name

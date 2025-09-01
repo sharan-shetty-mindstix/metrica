@@ -3,13 +3,16 @@
 echo "🚀 Deploying DEV Environment..."
 echo "================================"
 
+# Change to stack directory
+cd stack
+
 # Initialize Terraform
 echo "🔧 Initializing Terraform..."
 terraform init
 
 # Plan deployment
 echo "📋 Planning deployment..."
-terraform plan
+terraform plan -var-file="../variables/terraform.tfvars"
 
 # Ask for confirmation
 echo ""
@@ -22,7 +25,7 @@ fi
 
 # Apply deployment
 echo "🚀 Applying deployment..."
-terraform apply -auto-approve
+terraform apply -auto-approve -var-file="../variables/terraform.tfvars"
 
 echo ""
 echo "✅ DEV Environment deployment completed!"
