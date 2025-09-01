@@ -3,6 +3,14 @@
 echo "🚀 Deploying STAGE Environment..."
 echo "================================="
 
+# Source environment variables
+if [ -f "../variables/.env" ]; then
+    echo "📁 Loading environment variables from .env file..."
+    export $(cat ../variables/.env | grep -v '^#' | xargs)
+else
+    echo "⚠️  Warning: .env file not found. Using system environment variables."
+fi
+
 # Change to stack directory
 cd stack
 
