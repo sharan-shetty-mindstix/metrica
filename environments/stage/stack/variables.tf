@@ -25,7 +25,7 @@ variable "resource_group_name" {
 variable "storage_account_name" {
   description = "Name of the storage account"
   type        = string
-  default     = "wgacanpdapianstblobstage01"
+  default     = "wgacanpdapianststage01"
 }
 
 variable "key_vault_name" {

@@ -83,3 +83,18 @@ module "key_vault" {
   purge_protection_enabled   = var.key_vault_purge_protection_enabled
   sku_name                   = var.key_vault_sku_name
 }
+
+# BigQuery Connection for Data Factory
+module "bigquery_connection" {
+  source = "../../../modules/bigquery-connection"
+  
+  data_factory_id        = module.data_factory.data_factory_id
+  gcp_project_id         = var.gcp_project_id
+  gcp_service_account_email = var.gcp_service_account_email
+  gcp_private_key        = var.gcp_private_key
+  gcp_client_id          = var.gcp_client_id
+  service_principal_id   = module.data_factory.data_factory_identity.principal_id
+  service_principal_key  = module.data_factory.data_factory_identity.principal_id
+  tenant_id              = var.azure_tenant_id
+  bigquery_dataset       = var.bigquery_dataset
+}

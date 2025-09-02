@@ -82,9 +82,13 @@ module "data_factory" {
 module "bigquery_connection" {
   source = "../../../modules/bigquery-connection"
   
-  data_factory_id = module.data_factory.data_factory_id
-  gcp_project_id = var.gcp_project_id
+  data_factory_id        = module.data_factory.data_factory_id
+  gcp_project_id         = var.gcp_project_id
   gcp_service_account_email = var.gcp_service_account_email
-  gcp_private_key = var.gcp_private_key
-  gcp_client_id = var.gcp_client_id
+  gcp_private_key        = var.gcp_private_key
+  gcp_client_id          = var.gcp_client_id
+  service_principal_id   = module.data_factory.data_factory_identity.principal_id
+  service_principal_key  = module.data_factory.data_factory_identity.principal_id
+  tenant_id              = data.azurerm_client_config.current.tenant_id
+  bigquery_dataset       = var.bigquery_dataset
 }

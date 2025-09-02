@@ -11,6 +11,12 @@ GCP BigQuery → Azure Data Factory → Azure Data Lake Storage → Power BI
   (External)       (ETL/ELT)          (RAW/Bronze/Silver/Gold)
 ```
 
+**Data Flow:**
+1. **BigQuery**: Source data from Google Cloud Platform
+2. **Azure Data Factory**: Extract data from BigQuery and load into ADLS
+3. **Azure Data Lake Storage**: Store raw data and processed data
+4. **Power BI**: Consume data for analytics and reporting
+
 ## 🌍 **Environments**
 
 - **DEV**: Development environment with basic security
@@ -21,13 +27,19 @@ GCP BigQuery → Azure Data Factory → Azure Data Lake Storage → Power BI
 ```
 ├── environments/
 │   ├── dev/
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   └── terraform.tfvars
+│   │   ├── deploy.sh
+│   │   ├── stack/
+│   │   │   ├── main.tf
+│   │   │   └── variables.tf
+│   │   └── variables/
+│   │       └── terraform.tfvars
 │   └── stage/
-│       ├── main.tf
-│       ├── variables.tf
-│       └── terraform.tfvars
+│       ├── deploy.sh
+│       ├── stack/
+│       │   ├── main.tf
+│       │   └── variables.tf
+│       └── variables/
+│           └── terraform.tfvars
 ├── modules/
 │   ├── resource-group/
 │   ├── storage/
@@ -95,12 +107,15 @@ gcloud iam service-accounts keys create ~/.gcp/credentials.json \
 cd environments/dev
 ```
 
-Edit `terraform.tfvars`:
+Edit `variables/terraform.tfvars`:
 ```hcl
 azure_location        = "East US"
 azure_subscription_id = "your-actual-subscription-id"
 azure_tenant_id       = "your-actual-tenant-id"
 gcp_project_id        = "your-actual-gcp-project-id"
+gcp_service_account_email = "your-service-account@your-project.iam.gserviceaccount.com"
+gcp_private_key       = "your-actual-private-key"
+gcp_client_id         = "your-actual-client-id"
 ```
 
 #### **For STAGE Environment:**
@@ -108,12 +123,15 @@ gcp_project_id        = "your-actual-gcp-project-id"
 cd environments/stage
 ```
 
-Edit `terraform.tfvars`:
+Edit `variables/terraform.tfvars`:
 ```hcl
 azure_location        = "East US"
 azure_subscription_id = "your-actual-subscription-id"
 azure_tenant_id       = "your-actual-tenant-id"
 gcp_project_id        = "your-actual-gcp-project-id"
+gcp_service_account_email = "your-service-account@your-project.iam.gserviceaccount.com"
+gcp_private_key       = "your-actual-private-key"
+gcp_client_id         = "your-actual-client-id"
 ```
 
 ### **Step 4: Deploy Infrastructure**
@@ -121,17 +139,13 @@ gcp_project_id        = "your-actual-gcp-project-id"
 #### **Deploy DEV Environment:**
 ```bash
 cd environments/dev
-terraform init
-terraform plan
-terraform apply
+./deploy.sh
 ```
 
 #### **Deploy STAGE Environment:**
 ```bash
 cd environments/stage
-terraform init
-terraform plan
-terraform apply
+./deploy.sh
 ```
 
 ## 🔒 **Security Features**
@@ -152,8 +166,20 @@ terraform apply
 - **Resource Group**: Organized resource management
 - **Storage Account**: Azure Data Lake Storage Gen2 with tiered containers
 - **Key Vault**: Secure secrets and certificate management
-- **Data Factory**: Data orchestration and processing
-- **BigQuery Connection**: Secure connection to GCP BigQuery
+- **Data Factory**: Data orchestration and processing with BigQuery integration
+- **BigQuery Connection**: Secure connection to GCP BigQuery as data source
+
+## 🔄 **Data Pipeline**
+
+The Azure Data Factory pipeline performs the following operations:
+
+1. **CopyFromBigQuery**: Extracts data from BigQuery tables and loads into ADLS raw folder
+2. **ProcessDataInADLS**: Processes the raw data and stores in ADLS processed folder
+
+**Pipeline Activities:**
+- **Source**: Google BigQuery (using BigQuery linked service)
+- **Processing**: Azure Data Factory
+- **Destination**: Azure Data Lake Storage (raw → processed)
 
 ## 🧹 **Cleanup**
 
@@ -191,6 +217,7 @@ terraform plan
 - **State Management**: Consider using Azure Storage for Terraform state
 - **Cost Monitoring**: Set up cost alerts in Azure Portal
 - **Security**: Use managed identities where possible
+- **BigQuery Integration**: Ensure proper IAM permissions for BigQuery access
 
 ---
 

@@ -20,6 +20,7 @@ output "linked_services" {
   description = "Names of all linked services"
   value = {
     adls2 = azurerm_data_factory_linked_service_data_lake_storage_gen2.adls_linked_service.name
+    bigquery = "GoogleBigQuery"  # Reference to BigQuery linked service from bigquery-connection module (used as source)
   }
 }
 

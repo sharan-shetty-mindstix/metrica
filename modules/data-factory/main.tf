@@ -28,6 +28,20 @@ resource "azurerm_data_factory_pipeline" "data_ingestion_pipeline" {
 
   activities_json = jsonencode([
     {
+      name = "CopyFromBigQuery"
+      type = "Copy"
+      typeProperties = {
+        source = {
+          type = "GoogleBigQuerySource"
+          query = "SELECT * FROM `${var.gcp_project_id}.${var.bigquery_dataset}.${var.bigquery_table}`"
+        }
+        sink = {
+          type = "AzureDataLakeStoreSink"
+          folderPath = "raw"
+        }
+      }
+    },
+    {
       name = "ProcessDataInADLS"
       type = "Copy"
       typeProperties = {
