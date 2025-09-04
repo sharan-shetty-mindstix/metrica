@@ -1,6 +1,6 @@
-# Terraform Environments
+# GA4 Analytics Terraform Environments
 
-This directory contains the Terraform configurations for different environments (dev, stage, prod).
+This directory contains the Terraform configurations for different environments (dev, stage, prod) for the GA4 analytics data infrastructure.
 
 ## Folder Structure
 

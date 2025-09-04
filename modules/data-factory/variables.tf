@@ -23,21 +23,6 @@ variable "tenant_id" {
   type        = string
 }
 
-variable "gcp_project_id" {
-  description = "GCP project ID"
-  type        = string
-}
-
-variable "bigquery_dataset" {
-  description = "BigQuery dataset name"
-  type        = string
-}
-
-variable "bigquery_table" {
-  description = "BigQuery table name"
-  type        = string
-}
-
 variable "tags" {
   description = "Tags to apply to the Data Factory"
   type        = map(string)

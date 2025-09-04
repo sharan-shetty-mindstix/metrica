@@ -1,15 +1,24 @@
-# Azure Data Infrastructure with Terraform
+# GA4 Analytics Data Infrastructure with Terraform
 
-This Terraform configuration provisions a complete data processing and analytics infrastructure in Azure with GCP BigQuery integration. The infrastructure includes Azure Data Factory, Azure Data Lake Storage Gen2, Azure Key Vault, and connections to GCP BigQuery.
+This Terraform configuration provisions a secure, enterprise-grade data processing and analytics infrastructure for Google Analytics 4 (GA4) data. The infrastructure includes Azure Data Factory, Azure Data Lake Storage Gen2, Azure Key Vault, and secure connections to GCP BigQuery with Workload Identity Federation.
 
 ## 🏗️ **Architecture Overview**
 
 ```
-GCP BigQuery → Azure Data Factory → Azure Data Lake Storage → Power BI
-     ↓                    ↓                    ↓
-  Data Source      Data Processing      Data Storage
-  (External)       (ETL/ELT)          (RAW/Bronze/Silver/Gold)
+GA4 Property → BigQuery → Azure Data Factory → Azure Data Lake Storage → Analytics
+     ↓              ↓              ↓                    ↓                    ↓
+  Analytics    Data Export    ETL Processing    Data Storage        Business
+   Platform    (Automatic)    (Scheduled)      (Raw/Bronze/Silver/  Intelligence
+                                                      Gold)
 ```
+
+## 🔐 **Security Features**
+
+- **Workload Identity Federation**: No long-lived service account keys
+- **Azure Key Vault Integration**: Secure credential storage
+- **Encryption**: Data encrypted at rest and in transit
+- **Access Control**: RBAC and network security
+- **Audit Logging**: Comprehensive monitoring and logging
 
 ## 🌍 **Environments**
 
@@ -49,12 +58,18 @@ GCP BigQuery → Azure Data Factory → Azure Data Lake Storage → Power BI
 - GCP Service Account Key File
 - Service Account with BigQuery permissions
 
+## 📚 **Documentation**
+
+- **[GA4 Secure Setup Guide](GA4_SECURE_SETUP_GUIDE.md)**: Comprehensive guide for secure GA4 integration
+- **[Environment Setup](environments/README.md)**: Environment configuration and deployment
+
 ## 🚀 **Deployment Instructions**
 
 ### **Prerequisites:**
 1. **Azure CLI** installed and authenticated
 2. **Google Cloud SDK** installed and authenticated
 3. **Terraform** (version >= 1.0)
+4. **GA4 Property** configured with BigQuery export enabled
 
 ### **Step 1: Azure Authentication**
 ```bash
@@ -150,10 +165,13 @@ terraform apply
 ## 📊 **Resources Created**
 
 - **Resource Group**: Organized resource management
-- **Storage Account**: Azure Data Lake Storage Gen2 with tiered containers
-- **Key Vault**: Secure secrets and certificate management
-- **Data Factory**: Data orchestration and processing
-- **BigQuery Connection**: Secure connection to GCP BigQuery
+- **Storage Account**: Azure Data Lake Storage Gen2 with tiered containers (Raw/Bronze/Silver/Gold)
+- **Key Vault**: Secure secrets and certificate management with GCP credentials
+- **Data Factory**: GA4 data orchestration and processing pipelines
+- **BigQuery Connection**: Secure connection to GCP BigQuery with Workload Identity
+- **GCP Service Account**: Dedicated service account for Azure Data Factory
+- **BigQuery Dataset**: GA4 analytics dataset with proper IAM permissions
+- **Workload Identity Pool**: Secure authentication between Azure and GCP
 
 ## 🧹 **Cleanup**
 

@@ -23,7 +23,11 @@ output "linked_services" {
   }
 }
 
-output "pipeline_name" {
-  description = "Name of the data ingestion pipeline"
-  value       = azurerm_data_factory_pipeline.data_ingestion_pipeline.name
+output "pipelines" {
+  description = "Names of all pipelines"
+  value = {
+    ga4_extraction = azurerm_data_factory_pipeline.ga4_data_pipeline.name
+    ga4_processing = azurerm_data_factory_pipeline.ga4_processing_pipeline.name
+    ga4_analytics  = azurerm_data_factory_pipeline.ga4_analytics_pipeline.name
+  }
 }

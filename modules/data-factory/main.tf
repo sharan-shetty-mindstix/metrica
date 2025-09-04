@@ -21,25 +21,44 @@ resource "azurerm_data_factory_linked_service_data_lake_storage_gen2" "adls_link
   url                  = var.storage_endpoint
 }
 
-# Data Factory Pipeline for data processing
-resource "azurerm_data_factory_pipeline" "data_ingestion_pipeline" {
-  name                = "DataIngestionPipeline"
+# GA4 Data Extraction Pipeline
+resource "azurerm_data_factory_pipeline" "ga4_data_pipeline" {
+  name                = "GA4DataExtractionPipeline"
   data_factory_id     = azurerm_data_factory.adf.id
 
-  activities_json = jsonencode([
-    {
-      name = "ProcessDataInADLS"
-      type = "Copy"
-      typeProperties = {
-        source = {
-          type = "AzureDataLakeStoreSource"
-          folderPath = "raw"
-        }
-        sink = {
-          type = "AzureDataLakeStoreSink"
-          folderPath = "processed"
-        }
-      }
-    }
-  ])
+  description = "Pipeline for extracting GA4 data from BigQuery and loading to ADLS"
+  
+  annotations = [
+    "GA4 Data",
+    "BigQuery",
+    "Analytics"
+  ]
+}
+
+# GA4 Data Processing Pipeline (Bronze to Silver)
+resource "azurerm_data_factory_pipeline" "ga4_processing_pipeline" {
+  name                = "GA4DataProcessingPipeline"
+  data_factory_id     = azurerm_data_factory.adf.id
+
+  description = "Pipeline for processing GA4 data from Bronze to Silver layer"
+  
+  annotations = [
+    "GA4 Data",
+    "Data Processing",
+    "Bronze to Silver"
+  ]
+}
+
+# GA4 Analytics Pipeline (Silver to Gold)
+resource "azurerm_data_factory_pipeline" "ga4_analytics_pipeline" {
+  name                = "GA4AnalyticsPipeline"
+  data_factory_id     = azurerm_data_factory.adf.id
+
+  description = "Pipeline for creating GA4 analytics and KPI tables"
+  
+  annotations = [
+    "GA4 Data",
+    "Analytics",
+    "Silver to Gold"
+  ]
 }

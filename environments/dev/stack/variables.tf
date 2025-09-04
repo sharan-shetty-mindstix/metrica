@@ -2,7 +2,7 @@
 variable "azure_location" {
   description = "Azure region for resources"
   type        = string
-  default     = "East US"
+  default     = "East US 2"
 }
 
 variable "azure_subscription_id" {
@@ -19,25 +19,25 @@ variable "azure_tenant_id" {
 variable "resource_group_name" {
   description = "Name of the resource group"
   type        = string
-  default     = "wgacamp-dapi-an-rg-dev01"
+  default     = "metrica-mvp-rg-dev01"
 }
 
 variable "storage_account_name" {
   description = "Name of the storage account"
   type        = string
-  default     = "wgacanpdapianstblobdev01"
+  default     = "metricamvpstblobdev01"
 }
 
 variable "key_vault_name" {
   description = "Name of the key vault"
   type        = string
-  default     = "wgacamp-akv-dev01"
+  default     = "metrica-mvp-akv-dev01"
 }
 
 variable "data_factory_name" {
   description = "Name of the data factory"
   type        = string
-  default     = "wgacamp-dapi-an-adf-dev01"
+  default     = "metrica-mvp-adf-dev01"
 }
 
 # Storage Configuration
@@ -115,13 +115,38 @@ variable "gcp_client_id" {
 variable "bigquery_dataset" {
   description = "BigQuery dataset name"
   type        = string
-  default     = "wgaca_data"
+  default     = "gfs_global_forecast_system"
 }
 
 variable "bigquery_table" {
   description = "BigQuery table name"
   type        = string
-  default     = "sales_data"
+  default     = "weather"
+}
+
+# GA4 Configuration
+variable "ga4_dataset_id" {
+  description = "BigQuery dataset ID for GA4 data"
+  type        = string
+  default     = "ga4_data"
+}
+
+variable "ga4_property_id" {
+  description = "GA4 Property ID"
+  type        = string
+  default     = ""
+}
+
+variable "ga4_data_stream_id" {
+  description = "GA4 Data Stream ID"
+  type        = string
+  default     = ""
+}
+
+variable "gcp_service_account_key" {
+  description = "GCP service account key (base64 encoded)"
+  type        = string
+  sensitive   = true
 }
 
 # Tags
