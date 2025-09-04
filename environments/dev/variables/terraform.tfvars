@@ -1,7 +1,7 @@
 # =============================================================================
 # Azure Configuration
 # =============================================================================
-azure_location        = "eastus2"
+azure_location        = "qatar"
 azure_subscription_id = "db86071b-e936-4caf-8cf4-455b661615a2"
 azure_tenant_id       = "bdbb7f5b-efd1-4e5a-8b55-af6ce35e39c5"
 

@@ -95,7 +95,7 @@ variable "delete_contents_on_destroy" {
 variable "table_deletion_protection" {
   description = "Whether to enable deletion protection for tables"
   type        = bool
-  default     = true
+  default     = false
 }
 
 # Labels
